@@ -125,7 +125,6 @@ export const deleteArticle = async (postId: string) => {
       message: "Success to delete article",
     };
   } catch (error) {
-
     throw new Error("Failed to delete article");
   }
 };
@@ -234,324 +233,332 @@ export const saveArticle = async (data: FormData, id?: string | null) => {
       }),
     );
 
-    const article = await prisma.$transaction(async (tx) => {
-      let articleId = id;
+    const article = await prisma.$transaction(
+      async (tx) => {
+        let articleId = id;
 
-      let existingArticle: {
-        id: string;
+        let existingArticle: {
+          id: string;
 
-        slug: string;
+          slug: string;
 
-        categories: { slug: string }[];
+          categories: { slug: string }[];
 
-        genres: { slug: string }[];
-      } | null = null;
+          genres: { slug: string }[];
+        } | null = null;
 
-      if (articleId) {
-        existingArticle = await tx.article.findUnique({
-          where: { id: articleId },
+        if (articleId) {
+          existingArticle = await tx.article.findUnique({
+            where: { id: articleId },
 
-          select: {
-            id: true,
+            select: {
+              id: true,
 
-            slug: true,
+              slug: true,
 
-            categories: {
-              select: { slug: true },
-            },
-
-            genres: {
-              select: { slug: true },
-            },
-          },
-        });
-
-        if (!existingArticle) {
-          throw new Error("Article not found");
-        }
-
-        await tx.article.update({
-          where: { id: articleId },
-
-          data: {
-            title,
-
-            slug,
-
-            thumbnail,
-
-            uploadBy,
-
-            metaDescription,
-
-            content,
-
-            status,
-
-            categories: {
-              set: categoryRecords.map((category) => ({
-                id: category.id,
-              })),
-            },
-
-            genres: {
-              set: genresRecords.map((genre) => ({
-                id: genre.id,
-              })),
-            },
-          },
-        });
-      } else {
-        const createdArticle = await tx.article.create({
-          data: {
-            title,
-
-            slug,
-
-            thumbnail,
-
-            uploadBy,
-
-            metaDescription,
-
-            content,
-
-            status,
-
-            categories: {
-              connect: categoryRecords.map((category) => ({
-                id: category.id,
-              })),
-            },
-
-            genres: {
-              connect: genresRecords.map((genre) => ({
-                id: genre.id,
-              })),
-            },
-          },
-        });
-
-        articleId = createdArticle.id;
-      }
-
-      if (!articleId) {
-        throw new Error("Failed to resolve article ID");
-      }
-
-      const existingDownloads = await tx.download.findMany({
-        where: { articleId },
-        select: {
-          id: true,
-          links: { select: { id: true } },
-        },
-      });
-
-      const existingDownloadIds = new Set(
-        existingDownloads.map((download) => download.id),
-      );
-
-      const submittedDownloadIds = downloads
-        .map((download) => download.id)
-        .filter((downloadId): downloadId is string => Boolean(downloadId));
-
-      for (const downloadId of submittedDownloadIds) {
-        if (!existingDownloadIds.has(downloadId)) {
-          throw new Error("Download does not belong to this article");
-        }
-      }
-
-      const submittedDownloadIdSet = new Set(submittedDownloadIds);
-      const downloadIdsToDelete = existingDownloads
-        .map((download) => download.id)
-        .filter((downloadId) => !submittedDownloadIdSet.has(downloadId));
-
-      if (downloadIdsToDelete.length > 0) {
-        await tx.download.deleteMany({
-          where: {
-            articleId,
-            id: { in: downloadIdsToDelete },
-          },
-        });
-      }
-
-      for (const download of downloads) {
-        if (download.id) {
-          const existingDownloadRecord = existingDownloads.find(
-            (item) => item.id === download.id,
-          );
-
-          if (!existingDownloadRecord) {
-            throw new Error("Download does not belong to this article");
-          }
-
-          const existingLinkIds = new Set(
-            existingDownloadRecord.links.map((link) => link.id),
-          );
-
-          const submittedLinkIds = download.links
-            .map((link) => link.id)
-            .filter((linkId): linkId is string => Boolean(linkId));
-
-          for (const linkId of submittedLinkIds) {
-            if (!existingLinkIds.has(linkId)) {
-              throw new Error("Download link does not belong to this download");
-            }
-          }
-
-          const submittedLinkIdSet = new Set(submittedLinkIds);
-          const linkIdsToDelete = existingDownloadRecord.links
-            .map((link) => link.id)
-            .filter((linkId) => !submittedLinkIdSet.has(linkId));
-
-          if (linkIdsToDelete.length > 0) {
-            await tx.downloadLink.deleteMany({
-              where: {
-                downloadId: download.id,
-                id: { in: linkIdsToDelete },
+              categories: {
+                select: { slug: true },
               },
-            });
-          }
 
-          await tx.download.update({
-            where: {
-              id: download.id,
-              articleId,
-            },
-            data: {
-              quality: download.quality,
-              isActive: download.isActive,
+              genres: {
+                select: { slug: true },
+              },
             },
           });
 
-          for (const link of download.links) {
-            if (link.id) {
-              await tx.downloadLink.update({
-                where: {
-                  id: link.id,
-                  downloadId: download.id,
-                },
-                data: {
-                  name: link.name,
-                  url: link.url,
-                  isActive: link.isActive,
-                },
-              });
-            } else {
-              await tx.downloadLink.create({
-                data: {
-                  name: link.name,
-                  url: link.url,
-                  isActive: link.isActive,
-                  downloadId: download.id,
-                },
-              });
-            }
+          if (!existingArticle) {
+            throw new Error("Article not found");
           }
-        } else {
-          await tx.download.create({
+
+          await tx.article.update({
+            where: { id: articleId },
+
             data: {
-              quality: download.quality,
-              isActive: download.isActive,
-              articleId,
-              links: {
-                create: download.links.map((link) => ({
-                  name: link.name,
-                  url: link.url,
-                  isActive: link.isActive,
+              title,
+
+              slug,
+
+              thumbnail,
+
+              uploadBy,
+
+              metaDescription,
+
+              content,
+
+              status,
+
+              categories: {
+                set: categoryRecords.map((category) => ({
+                  id: category.id,
+                })),
+              },
+
+              genres: {
+                set: genresRecords.map((genre) => ({
+                  id: genre.id,
                 })),
               },
             },
           });
+        } else {
+          const createdArticle = await tx.article.create({
+            data: {
+              title,
+
+              slug,
+
+              thumbnail,
+
+              uploadBy,
+
+              metaDescription,
+
+              content,
+
+              status,
+
+              categories: {
+                connect: categoryRecords.map((category) => ({
+                  id: category.id,
+                })),
+              },
+
+              genres: {
+                connect: genresRecords.map((genre) => ({
+                  id: genre.id,
+                })),
+              },
+            },
+          });
+
+          articleId = createdArticle.id;
         }
-      }
 
-      const existingStreams = await tx.iframe.findMany({
-        where: { articleId },
-
-        select: { id: true },
-      });
-
-      const existingIds = new Set(existingStreams.map((stream) => stream.id));
-
-      const submittedIds = streams
-
-        .map((stream) => stream.id)
-
-        .filter((streamId): streamId is string => Boolean(streamId));
-
-      for (const streamId of submittedIds) {
-        if (!existingIds.has(streamId)) {
-          throw new Error("Iframe does not belong to this article");
+        if (!articleId) {
+          throw new Error("Failed to resolve article ID");
         }
-      }
 
-      const submittedIdSet = new Set(submittedIds);
-
-      const idsToDelete = existingStreams
-
-        .map((stream) => stream.id)
-
-        .filter((streamId) => !submittedIdSet.has(streamId));
-
-      if (idsToDelete.length > 0) {
-        await tx.iframe.deleteMany({
-          where: {
-            articleId,
-
-            id: { in: idsToDelete },
+        const existingDownloads = await tx.download.findMany({
+          where: { articleId },
+          select: {
+            id: true,
+            links: { select: { id: true } },
           },
         });
-      }
 
-      for (const stream of streams) {
-        if (stream.id) {
-          await tx.iframe.update({
+        const existingDownloadIds = new Set(
+          existingDownloads.map((download) => download.id),
+        );
+
+        const submittedDownloadIds = downloads
+          .map((download) => download.id)
+          .filter((downloadId): downloadId is string => Boolean(downloadId));
+
+        for (const downloadId of submittedDownloadIds) {
+          if (!existingDownloadIds.has(downloadId)) {
+            throw new Error("Download does not belong to this article");
+          }
+        }
+
+        const submittedDownloadIdSet = new Set(submittedDownloadIds);
+        const downloadIdsToDelete = existingDownloads
+          .map((download) => download.id)
+          .filter((downloadId) => !submittedDownloadIdSet.has(downloadId));
+
+        if (downloadIdsToDelete.length > 0) {
+          await tx.download.deleteMany({
             where: {
-              id: stream.id,
-
               articleId,
-            },
-
-            data: {
-              title: stream.title,
-
-              src: stream.src,
-
-              isActive: stream.isActive ?? true,
-            },
-          });
-        } else {
-          await tx.iframe.create({
-            data: {
-              title: stream.title,
-
-              src: stream.src,
-
-              isActive: stream.isActive ?? true,
-
-              articleId,
+              id: { in: downloadIdsToDelete },
             },
           });
         }
-      }
 
-      return tx.article.findUniqueOrThrow({
-        where: { id: articleId },
+        for (const download of downloads) {
+          if (download.id) {
+            const existingDownloadRecord = existingDownloads.find(
+              (item) => item.id === download.id,
+            );
 
-        include: {
-          iframe: true,
+            if (!existingDownloadRecord) {
+              throw new Error("Download does not belong to this article");
+            }
 
-          categories: true,
+            const existingLinkIds = new Set(
+              existingDownloadRecord.links.map((link) => link.id),
+            );
 
-          genres: true,
+            const submittedLinkIds = download.links
+              .map((link) => link.id)
+              .filter((linkId): linkId is string => Boolean(linkId));
 
-          download: {
-            include: { links: true },
+            for (const linkId of submittedLinkIds) {
+              if (!existingLinkIds.has(linkId)) {
+                throw new Error(
+                  "Download link does not belong to this download",
+                );
+              }
+            }
+
+            const submittedLinkIdSet = new Set(submittedLinkIds);
+            const linkIdsToDelete = existingDownloadRecord.links
+              .map((link) => link.id)
+              .filter((linkId) => !submittedLinkIdSet.has(linkId));
+
+            if (linkIdsToDelete.length > 0) {
+              await tx.downloadLink.deleteMany({
+                where: {
+                  downloadId: download.id,
+                  id: { in: linkIdsToDelete },
+                },
+              });
+            }
+
+            await tx.download.update({
+              where: {
+                id: download.id,
+                articleId,
+              },
+              data: {
+                quality: download.quality,
+                isActive: download.isActive,
+              },
+            });
+
+            for (const link of download.links) {
+              if (link.id) {
+                await tx.downloadLink.update({
+                  where: {
+                    id: link.id,
+                    downloadId: download.id,
+                  },
+                  data: {
+                    name: link.name,
+                    url: link.url,
+                    isActive: link.isActive,
+                  },
+                });
+              } else {
+                await tx.downloadLink.create({
+                  data: {
+                    name: link.name,
+                    url: link.url,
+                    isActive: link.isActive,
+                    downloadId: download.id,
+                  },
+                });
+              }
+            }
+          } else {
+            await tx.download.create({
+              data: {
+                quality: download.quality,
+                isActive: download.isActive,
+                articleId,
+                links: {
+                  create: download.links.map((link) => ({
+                    name: link.name,
+                    url: link.url,
+                    isActive: link.isActive,
+                  })),
+                },
+              },
+            });
+          }
+        }
+
+        const existingStreams = await tx.iframe.findMany({
+          where: { articleId },
+
+          select: { id: true },
+        });
+
+        const existingIds = new Set(existingStreams.map((stream) => stream.id));
+
+        const submittedIds = streams
+
+          .map((stream) => stream.id)
+
+          .filter((streamId): streamId is string => Boolean(streamId));
+
+        for (const streamId of submittedIds) {
+          if (!existingIds.has(streamId)) {
+            throw new Error("Iframe does not belong to this article");
+          }
+        }
+
+        const submittedIdSet = new Set(submittedIds);
+
+        const idsToDelete = existingStreams
+
+          .map((stream) => stream.id)
+
+          .filter((streamId) => !submittedIdSet.has(streamId));
+
+        if (idsToDelete.length > 0) {
+          await tx.iframe.deleteMany({
+            where: {
+              articleId,
+
+              id: { in: idsToDelete },
+            },
+          });
+        }
+
+        for (const stream of streams) {
+          if (stream.id) {
+            await tx.iframe.update({
+              where: {
+                id: stream.id,
+
+                articleId,
+              },
+
+              data: {
+                title: stream.title,
+
+                src: stream.src,
+
+                isActive: stream.isActive ?? true,
+              },
+            });
+          } else {
+            await tx.iframe.create({
+              data: {
+                title: stream.title,
+
+                src: stream.src,
+
+                isActive: stream.isActive ?? true,
+
+                articleId,
+              },
+            });
+          }
+        }
+
+        return tx.article.findUniqueOrThrow({
+          where: { id: articleId },
+
+          include: {
+            iframe: true,
+
+            categories: true,
+
+            genres: true,
+
+            download: {
+              include: { links: true },
+            },
           },
-        },
-      });
-    });
+        });
+      },
+      {
+        maxWait: 10000,
+        timeout: 15000,
+      },
+    );
 
     updateTag("articles");
 
@@ -585,7 +592,6 @@ export const saveArticle = async (data: FormData, id?: string | null) => {
         : "The post was successfully created.",
     };
   } catch (error) {
- 
     throw new Error(
       error instanceof Error
         ? `Failed to save article: ${error.message}`
@@ -664,7 +670,6 @@ export const deleteAllArticle = async (ids: string[]) => {
       message: `Success to delete ${articles.length} article`,
     };
   } catch (error) {
-
     throw new Error("Failed to delete articles");
   }
 };
