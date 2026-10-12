@@ -115,7 +115,7 @@ export default async function CategoryPage({
         {/* Articles */}
         {category.articles.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-2 md:grid-cols-3 lg:grid-cols-5">
               {category.articles.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))}

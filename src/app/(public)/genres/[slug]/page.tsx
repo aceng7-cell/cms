@@ -127,7 +127,7 @@ export default async function CategoryPage({
         {/* Articles */}
         {category.articles.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-2 md:grid-cols-3 lg:grid-cols-5">
               {category.articles.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))}
@@ -141,7 +141,7 @@ export default async function CategoryPage({
               >
                 {currentPage > 1 && (
                   <Link
-                    href={`/category/${category.slug}?page=${currentPage - 1}`}
+                    href={`/genres/${category.slug}?page=${currentPage - 1}`}
                     aria-label="Previous page"
                     className="inline-flex h-10 items-center gap-2 rounded-lg border bg-background px-3 text-sm font-medium transition-colors hover:bg-muted"
                   >
@@ -156,7 +156,7 @@ export default async function CategoryPage({
 
                 {currentPage < totalPages && (
                   <Link
-                    href={`/category/${category.slug}?page=${currentPage + 1}`}
+                    href={`/genres/${category.slug}?page=${currentPage + 1}`}
                     aria-label="Next page"
                     className="inline-flex h-10 items-center gap-2 rounded-lg border bg-background px-3 text-sm font-medium transition-colors hover:bg-muted"
                   >
