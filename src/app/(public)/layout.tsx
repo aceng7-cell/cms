@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Prisma } from "@/generated/prisma/client";
 import { getSiteSetting } from "../../../lib/site";
 import { getAds } from "../../../lib/ads";
-import AdsSection from "@/components/ads/after-hero";
+
 import {
   SidebarInset,
   SidebarProvider,
@@ -156,15 +156,11 @@ export default async function PublicLayout({
                 <Script key={ad.id} src={ad.url} strategy="lazyOnload" />
               ))}
 
-          {process.env.VERCEL_ENV === "production" && (
-            <AdsSection ads={ads} position="head" />
-          )}
+       
 
           {children}
 
-          {process.env.VERCEL_ENV === "production" && (
-            <AdsSection ads={ads} position="body" />
-          )}
+         
           {/* Body Ad Scripts */}
           {process.env.VERCEL_ENV === "production" &&
             site.adLinks
