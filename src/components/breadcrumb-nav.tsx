@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -63,42 +62,39 @@ const Breadcrumbnav = () => {
       }));
 
   return (
-    <Breadcrumb className="min-w-0 overflow-hidden">
-      <BreadcrumbList className="flex-nowrap overflow-hidden whitespace-nowrap">
+    <Breadcrumb className="w-full min-w-0 max-w-full overflow-hidden">
+      <BreadcrumbList className="flex max-w-full flex-nowrap overflow-hidden">
         <BreadcrumbItem className="shrink-0">
           {displaySegments.length === 0 ? (
             <BreadcrumbPage>{homeLabel}</BreadcrumbPage>
           ) : (
-            <BreadcrumbLink href={homeHref}>
-              {homeLabel}
-            </BreadcrumbLink>
+            <BreadcrumbLink href={homeHref}>{homeLabel}</BreadcrumbLink>
           )}
         </BreadcrumbItem>
 
         {displaySegments.map((segment, index) => {
           const isLast = index === displaySegments.length - 1;
           const label =
-            segment.label.charAt(0).toUpperCase() +
-            segment.label.slice(1);
+            segment.label.charAt(0).toUpperCase() + segment.label.slice(1);
 
           return (
             <Fragment key={`${segment.label}-${index}`}>
-              <BreadcrumbSeparator className="shrink-0" />
+              <BreadcrumbSeparator className="mx-1 shrink-0" />
 
-              <BreadcrumbItem className="min-w-0 overflow-hidden">
+              <BreadcrumbItem className="min-w-0 max-w-[180px] shrink overflow-hidden sm:max-w-[280px]">
                 {isLast ? (
-                  <BreadcrumbPage className="truncate">
+                  <BreadcrumbPage className="block truncate">
                     {label}
                   </BreadcrumbPage>
                 ) : segment.href ? (
                   <BreadcrumbLink
-                    className="truncate"
+                    className="block truncate"
                     href={segment.href}
                   >
                     {label}
                   </BreadcrumbLink>
                 ) : (
-                  <BreadcrumbPage className="truncate">
+                  <BreadcrumbPage className="block truncate">
                     {label}
                   </BreadcrumbPage>
                 )}
