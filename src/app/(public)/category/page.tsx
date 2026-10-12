@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getAllCategory } from "../../../../lib/category";
 import { getSiteSeo } from "../../../../lib/site";
 import { List } from "lucide-react";
-import Loading from "./loading";
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSeo();
