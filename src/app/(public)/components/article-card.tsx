@@ -40,13 +40,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/10 transition-colors duration-300 group-hover:from-black/90" />
 
-        {/* Play icon in center */}
-        {/* <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/40 bg-white/20 text-white shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-black sm:h-16 sm:w-16">
-            <PlayIcon className="ml-1 h-7 w-7 fill-current sm:h-8 sm:w-8" />
-          </div>
-        </div> */}
-
         {/* Title and date */}
         <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
           <h2 className="mb-2 line-clamp-2 text-base font-semibold leading-snug text-white sm:text-md">
