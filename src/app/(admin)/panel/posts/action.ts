@@ -102,26 +102,13 @@ export const deleteArticle = async (postId: string) => {
     });
 
     updateTag("articles");
-
     updateTag(`article:${article.slug}`);
-
     updateTag("categories");
-
     updateTag("genres");
-
-    for (const category of article.categories) {
-      updateTag(`category:${category.slug}`);
-    }
-
-    for (const genre of article.genres) {
-      updateTag(`genre:${genre.slug}`);
-    }
-
     revalidateArticlePaths();
 
     return {
       success: true,
-
       message: "Success to delete article",
     };
   } catch (error) {
@@ -131,24 +118,16 @@ export const deleteArticle = async (postId: string) => {
 
 export const saveArticle = async (data: FormData, id?: string | null) => {
   try {
+    let previousSlug: string | null = null;
     const title = (data.get("title") as string) ?? "";
-
     const uploadBy = (data.get("uploadBy") as string) || "ZZZ";
-
     const thumbnail = (data.get("thumbnail") as string) || "";
-
     const slug = (data.get("slug") as string) ?? "";
-
     const status = data.get("status") as StatusArticle;
-
     const metaDescription = (data.get("metaDescription") as string) || "";
-
     const categories = (data.get("categories") as string) || "";
-
     const genres = (data.get("genres") as string) || "";
-
     const content = (data.get("content") as string) ?? "";
-
     const streams = JSON.parse(
       (data.get("iframe") as string) || "[]",
     ) as StreamInput[];
@@ -269,6 +248,8 @@ export const saveArticle = async (data: FormData, id?: string | null) => {
           if (!existingArticle) {
             throw new Error("Article not found");
           }
+
+          previousSlug = existingArticle.slug;
 
           await tx.article.update({
             where: { id: articleId },
@@ -562,23 +543,13 @@ export const saveArticle = async (data: FormData, id?: string | null) => {
 
     updateTag("articles");
 
+    if (previousSlug) {
+      updateTag(`article:${previousSlug}`);
+    }
+
     updateTag(`article:${article.slug}`);
-
     updateTag("categories");
-
-    for (const category of article.categories) {
-      updateTag(`category:${category.slug}`);
-    }
-
-    if (id) {
-      const previous = await prisma.article.findUnique({
-        where: { id },
-
-        select: { slug: true },
-      });
-
-      void previous;
-    }
+    updateTag("genres");
 
     revalidateArticlePaths();
 
@@ -633,33 +604,11 @@ export const deleteAllArticle = async (ids: string[]) => {
     });
 
     updateTag("articles");
-
     updateTag("categories");
-
     updateTag("genres");
-
-    const affectedCategorySlugs = new Set<string>();
-
-    const affectedGenreSlugs = new Set<string>();
 
     for (const article of articles) {
       updateTag(`article:${article.slug}`);
-
-      for (const category of article.categories) {
-        affectedCategorySlugs.add(category.slug);
-      }
-
-      for (const genre of article.genres) {
-        affectedGenreSlugs.add(genre.slug);
-      }
-    }
-
-    for (const categorySlug of affectedCategorySlugs) {
-      updateTag(`category:${categorySlug}`);
-    }
-
-    for (const genreSlug of affectedGenreSlugs) {
-      updateTag(`genre:${genreSlug}`);
     }
 
     revalidateArticlePaths();
@@ -734,17 +683,6 @@ export const importArticles = async (items: ImportArticleInput[]) => {
       );
 
       const result = await saveArticle(formData, null);
-
-      if (result.success) {
-        updateTag("articles");
-        updateTag(`article:${result.data.slug}`);
-        updateTag("categories");
-
-        for (const category of result.data.categories) {
-          updateTag(`category:${category.slug}`);
-        }
-      }
-
       results.push({
         title: item.title,
         success: true,
