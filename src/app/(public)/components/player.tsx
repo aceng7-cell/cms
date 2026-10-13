@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ServerButtons } from "./server";
 import PlayerNotice from "./player-notice";
 import type { Prisma } from "@/generated/prisma/client";
 import { Posts } from "../[...slug]/page";
+
 import {
   AlertCircleIcon,
   Calendar,
   Download,
   ExternalLink,
+  Maximize2,
   TextIcon,
   UserIcon,
 } from "lucide-react";
@@ -40,6 +42,7 @@ export default function Player({
   site: PlayerSite;
   ads: AdsSectionProps[];
 }) {
+  const playerRef = useRef<HTMLDivElement>(null);
   const [activeServer, setActiveServer] = useState(
     posts.iframe[0]?.title ?? "",
   );
@@ -86,19 +89,38 @@ export default function Player({
           />
         </div>
       )}
-      <div className="overflow-hidden rounded-xl border border-border bg-black shadow-sm">
-        <div className="relative aspect-video w-full">
-          {activeStream && activeStream.isActive ? (
-            <div className="flex size-full items-center justify-center">
+
+      <div
+        ref={playerRef}
+        className="relative isolate aspect-video w-full overflow-hidden rounded-xl border border-border bg-black shadow-sm"
+      >
+        {activeStream?.isActive ? (
+          <>
+            <div className="absolute inset-0 h-full w-full [&>*]:!h-full [&>*]:!w-full [&_iframe]:!absolute [&_iframe]:!inset-0 [&_iframe]:!h-full [&_iframe]:!w-full [&_iframe]:!max-w-none">
               <Iframe src={activeStream.src} />
             </div>
-          ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-sm text-neutral-400">
-              <AlertCircleIcon className="size-8" />
-              <span>Stream unavailable</span>
-            </div>
-          )}
-        </div>
+
+            <button
+              type="button"
+              aria-label="Fullscreen"
+              onClick={() => {
+                if (document.fullscreenElement) {
+                  void document.exitFullscreen();
+                } else {
+                  void playerRef.current?.requestFullscreen();
+                }
+              }}
+              className="absolute bottom-3 right-3 z-50 rounded-lg bg-black/70 p-2 text-white transition hover:bg-black/90"
+            >
+              <Maximize2 className="size-5" />
+            </button>
+          </>
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-sm text-neutral-400">
+            <AlertCircleIcon className="size-8" />
+            <span>Stream unavailable</span>
+          </div>
+        )}
       </div>
       <div className="mt-5">
         <PlayerNotice site={site} />

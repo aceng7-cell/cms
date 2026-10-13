@@ -700,7 +700,7 @@ export const importArticles = async (items: ImportArticleInput[]) => {
       formData.set("title", item.title.trim());
       formData.set("slug", `${slugBase}-${crypto.randomUUID().slice(0, 8)}`);
       formData.set("uploadBy", "ZZZ");
-      formData.set("thumbnail", item.img || item.image || "");
+      formData.set("thumbnail", item.image || "");
       formData.set("status", "publish");
       formData.set("metaDescription", "");
       formData.set("categories", item.categories || "");
