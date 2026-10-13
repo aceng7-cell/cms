@@ -55,7 +55,7 @@ export default function Player({
   const createdAt = new Date(posts.createdAt);
 
   return (
-    <section className="mb-8 w-full max-w-5xl px-4 py-4 ">
+    <section className="mb-8 w-full max-w-4xl px-4 py-4 ">
       <div className="mb-5 space-y-3">
         <h2 className="flex items-start gap-2 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
           <TextIcon className="mt-0.5 size-6 shrink-0 text-primary" />
