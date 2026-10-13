@@ -7,8 +7,8 @@ async function fetchGenres(slug: string, page: number) {
   const currentPage = Math.max(1, page);
   const skip = (currentPage - 1) * PAGE_SIZE;
 
-  const [category, total] = await Promise.all([
-    prisma.category.findUnique({
+  const [genres, total] = await Promise.all([
+    prisma.genre.findUnique({
       where: {
         slug,
       },
@@ -45,7 +45,7 @@ async function fetchGenres(slug: string, page: number) {
   ]);
 
   return {
-    category,
+    genres,
     total,
     totalPages: Math.ceil(total / PAGE_SIZE),
     currentPage,
@@ -66,7 +66,7 @@ export const getGenres = (slug: string, page = 1) =>
 
 export const getAllGenres = unstable_cache(
   async () => {
-    return prisma.category.findMany({
+    return prisma.genre.findMany({
       select: {
         name: true,
         slug: true,
