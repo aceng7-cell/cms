@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   const categoryName = result.category.name;
   const title = `${categoryName} - ${site.siteName}`;
-  const description = `Browse the latest articles in the ${categoryName} category on ${site.siteName}.`;
+  const description = `Browse the latest videos in the ${categoryName} category on ${site.siteName}.`;
   const canonical = `${site.siteUrl}/category/${result.category.slug}`;
 
   return {

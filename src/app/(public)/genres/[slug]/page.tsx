@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getCategory } from "../../../../../lib/category";
+
 import { ArticleCard } from "../../components/article-card";
 import { Metadata } from "next";
 import { getSiteSeo } from "../../../../../lib/site";
 import { ArrowLeft, ArrowRight, List } from "lucide-react";
+import { getGenres } from "../../../../../lib/genres";
 
 export async function generateMetadata({
   params,
@@ -14,21 +15,21 @@ export async function generateMetadata({
   const { slug } = await params;
 
   const [result, site] = await Promise.all([
-    getCategory(slug, 1),
+    getGenres(slug, 1),
     getSiteSeo(),
   ]);
 
-  if (!result.category) {
+  if (!result.genres) {
     return {};
   }
 
-  const categoryName = result.category.name;
+  const categoryName = result.genres.name;
 
   const title = `${categoryName} - ${site.siteName}`;
 
-  const description = `Browse the latest articles in the ${categoryName} category on ${site.siteName}.`;
+  const description = `Browse the latest videos in the ${categoryName} genres on ${site.siteName}.`;
 
-  const canonical = `${site.siteUrl}/category/${result.category.slug}`;
+  const canonical = `${site.siteUrl}/genres/${result.genres.slug}`;
 
   return {
     title,
@@ -73,7 +74,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({
+export default async function GenresPage({
   params,
   searchParams,
 }: {
@@ -85,12 +86,12 @@ export default async function CategoryPage({
 
   const page = Math.max(1, Number(pageParam) || 1);
 
-  const { category, total, totalPages, currentPage } = await getCategory(
+  const { genres, total, totalPages, currentPage } = await getGenres(
     slug,
     page,
   );
 
-  if (!category) {
+  if (!genres) {
     notFound();
   }
 
@@ -107,7 +108,7 @@ export default async function CategoryPage({
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
               <h1 className="break-words text-2xl font-bold tracking-tight sm:text-3xl">
-                {category.name}
+                {genres.name}
               </h1>
 
               <p className="mt-2 text-sm text-muted-foreground">
@@ -125,10 +126,10 @@ export default async function CategoryPage({
         </section>
 
         {/* Articles */}
-        {category.articles.length > 0 ? (
+        {genres.articles.length > 0 ? (
           <>
             <div className="grid gap-2 md:grid-cols-3 lg:grid-cols-5">
-              {category.articles.map((article) => (
+              {genres.articles.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))}
             </div>
@@ -141,7 +142,7 @@ export default async function CategoryPage({
               >
                 {currentPage > 1 && (
                   <Link
-                    href={`/genres/${category.slug}?page=${currentPage - 1}`}
+                    href={`/genres/${genres.slug}?page=${currentPage - 1}`}
                     aria-label="Previous page"
                     className="inline-flex h-10 items-center gap-2 rounded-lg border bg-background px-3 text-sm font-medium transition-colors hover:bg-muted"
                   >
@@ -156,7 +157,7 @@ export default async function CategoryPage({
 
                 {currentPage < totalPages && (
                   <Link
-                    href={`/genres/${category.slug}?page=${currentPage + 1}`}
+                    href={`/genres/${genres.slug}?page=${currentPage + 1}`}
                     aria-label="Next page"
                     className="inline-flex h-10 items-center gap-2 rounded-lg border bg-background px-3 text-sm font-medium transition-colors hover:bg-muted"
                   >
