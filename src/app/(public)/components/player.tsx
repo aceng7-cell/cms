@@ -22,6 +22,7 @@ import { AdsSectionProps } from "../../../../lib/ads";
 import Link from "next/link";
 import Iframe from "./iframe";
 import Image from "next/image";
+import DownloadBtn from "./download";
 
 export type PlayerSite = Prisma.SiteSettingGetPayload<{
   select: {
@@ -161,45 +162,7 @@ export default function Player({
           Download Links
         </p>
 
-        {posts.download.length > 0 && (
-          <div className="space-y-4">
-            {posts.download.map((download, index) => (
-              <div key={`${download.quality}-${index}`} className="space-y-2">
-                <p className="text-xs font-semibold text-muted-foreground">
-                  {download.quality}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {download.links.map((link, linkIndex) => (
-                    <Link
-                      key={
-                        link.id ||
-                        `${download.quality}-${link.name}-${linkIndex}`
-                      }
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="
-                        inline-flex items-center gap-2 rounded-full
-                        border border-border bg-muted/50
-                        px-3 py-1.5 text-xs font-medium
-                        text-muted-foreground
-                        transition-colors
-                      hover:border-black/80
-                      hover:bg-black/90
-                      hover:text-white
-                      "
-                    >
-                      <Download className="size-3.5" />
-                      {link.name}
-                      <ExternalLink className="size-3 opacity-60" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <DownloadBtn posts={posts} ads={ads} />
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 border-t border-border pt-5 md:grid-cols-2">

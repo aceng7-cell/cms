@@ -21,7 +21,7 @@ export type Posts = Prisma.ArticleGetPayload<{
       select: {
         quality: true;
         links: {
-          select: { name: true; url: true; id: true };
+          select: { name: true; url: true; id: true; isActive: true };
         };
       };
     };
