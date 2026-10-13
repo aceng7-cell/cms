@@ -1,12 +1,7 @@
 "use client";
 import * as React from "react";
 
-import {
-  HomeIcon,
-  TagsIcon,
-  List,
-  Share2,
-} from "lucide-react";
+import { HomeIcon, TagsIcon, List, Share2 } from "lucide-react";
 
 import {
   SiFacebook,
@@ -91,7 +86,6 @@ export function AppSidebar({
   site,
   ...props
 }: { site: Site } & React.ComponentProps<typeof Sidebar>) {
-
   const pathname = usePathname();
   const currentPath = pathname.replace(/\/+$/, "") || "/";
   const socialLinks = site.socialLinks ?? [];
@@ -99,15 +93,17 @@ export function AppSidebar({
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="flex gap-4">
-          <div className="flex  aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+        
+          <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
             <Image
               src={site.logo ?? ""}
-              className="w-20 h-20"
-              height={100}
-              width={100}
+              className="size-full object-contain"
+              height={50}
+              width={50}
               alt={site.title}
             />
           </div>
+          
           <div className="grid items-center text-left text-sm leading-tight">
             <span className="truncate font-medium">{site.title}</span>
           </div>
@@ -169,7 +165,6 @@ export function AppSidebar({
                       >
                         <Icon />
                         <span className="truncate">{social.name}</span>
-            
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
