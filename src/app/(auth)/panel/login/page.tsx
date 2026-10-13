@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { LoginForm } from "./components/form";
 
 export const metadata: Metadata = {
-  title: "LIVEMOTOGP",
+  title: "-",
 };
 
 export default async function LoginPage() {
