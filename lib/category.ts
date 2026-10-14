@@ -2,7 +2,7 @@ import { unstable_cache } from "next/cache";
 import prisma from "./prisma";
 
 const PAGE_SIZE = 15;
-const PAGE_CATEGORIES_SIZE = 20;
+const PAGE_CATEGORIES_SIZE = 50;
 
 async function fetchCategory(slug: string, page: number) {
   const currentPage = Math.max(1, page);

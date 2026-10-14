@@ -65,6 +65,11 @@ const data = {
           url: "genres",
           icon: List,
         },
+        {
+          title: "Category",
+          url: "category",
+          icon: List,
+        },
       ],
     },
   ],
@@ -93,7 +98,6 @@ export function AppSidebar({
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="flex gap-4">
-        
           <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
             <Image
               src={site.logo ?? ""}
@@ -103,7 +107,7 @@ export function AppSidebar({
               alt={site.title}
             />
           </div>
-          
+
           <div className="grid items-center text-left text-sm leading-tight">
             <span className="truncate font-medium">{site.title}</span>
           </div>

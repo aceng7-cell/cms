@@ -18,7 +18,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const page = Math.max(1, Number.parseInt(params.page ?? "1", 10) || 1);
 
   const search = (params.q ?? "").trim();
-  const isSearching = search.length > 0;
   const [{ articles, currentPage, totalPages, total }] = await Promise.all([
     getArticles(page, search),
   ]);
