@@ -25,6 +25,8 @@ const View = ({ open, setOpen, article }: ViewProps) => {
     article.createdAt,
     "yyyy/MM/dd",
   )}/${article.slug}`;
+  const urlAndTitle = `${article.title}\nLink Download: 👇 \n${url}`;
+
   return (
     <Modal
       open={open}
@@ -39,7 +41,18 @@ const View = ({ open, setOpen, article }: ViewProps) => {
               <CardTitle className="text-lg">{article.title}</CardTitle>
 
               <div className="my-1">
-                <CardDescription className="mt-1">{url}</CardDescription>
+                <CardDescription className="mt-1 flex gap-1 ">
+                  {url}
+                </CardDescription>
+                <Button
+                  variant={"default"}
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(urlAndTitle);
+                  }}
+                >
+                  <Copy />
+                  Copy URL and title
+                </Button>
                 <Button
                   variant={"default"}
                   onClick={async () => {

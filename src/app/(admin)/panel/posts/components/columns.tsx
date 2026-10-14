@@ -256,6 +256,18 @@ export const getColumns = ({
                   row.original.createdAt,
                   "yyyy/MM/dd",
                 )}/${row.original.slug}`;
+                const urlAndTitle = `${row.original.title}\nLink Download: 👇 \n${url}`;
+                await navigator.clipboard.writeText(urlAndTitle);
+              }}
+            >
+              Copy URL and title
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                const url = `${window.location.origin}/${format(
+                  row.original.createdAt,
+                  "yyyy/MM/dd",
+                )}/${row.original.slug}`;
 
                 await navigator.clipboard.writeText(url);
               }}

@@ -651,10 +651,10 @@ export const importArticles = async (items: ImportArticleInput[]) => {
       formData.set("uploadBy", "ZZZ");
       formData.set("thumbnail", item.image || "");
       formData.set("status", "publish");
-      formData.set("metaDescription", "");
       formData.set("categories", item.categories || "");
       formData.set("genres", item.genres || "");
       formData.set("content", "");
+      formData.set("metaDescription", `${item.title.trim()}`);
 
       formData.set(
         "iframe",

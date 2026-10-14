@@ -1,6 +1,5 @@
 import { Posts } from "../[...slug]/page";
 import { Download, ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { AdsSectionProps } from "../../../../lib/ads";
 import Link from "next/link";
 
@@ -33,8 +32,7 @@ const DownloadBtn = ({
                         (ad) => ad.position === "popunder",
                       );
 
-                      if (popunder && !sessionStorage.getItem("adShown")) {
-                        sessionStorage.setItem("adShown", "true");
+                      if (popunder) {
                         window.open(
                           popunder.url,
                           "_blank",
