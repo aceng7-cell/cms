@@ -25,7 +25,7 @@ const View = ({ open, setOpen, article }: ViewProps) => {
     article.createdAt,
     "yyyy/MM/dd",
   )}/${article.slug}`;
-  const urlAndTitle = `${article.title}\nLink Download: 👇 \n${url}`;
+  const urlAndTitle = `${article.title}\n\nLink Download: 👇 \n${url}`;
 
   return (
     <Modal
