@@ -72,11 +72,11 @@ export const getArticles = (page = 1, search = "") =>
         articles,
         total,
         totalPages: Math.ceil(total / PAGE_SIZE),
-        currentPage: page,
+        currentPage: Math.max(1, page),
         search,
       };
     },
-    ["articles", String(page), search],
+    ["articles", String(Math.max(1, page)), search],
     {
       tags: ["articles"],
       revalidate: 7200,
