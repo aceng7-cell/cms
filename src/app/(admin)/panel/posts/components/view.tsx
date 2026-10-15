@@ -74,12 +74,10 @@ const View = ({ open, setOpen, article }: ViewProps) => {
             <div className="w-full">
               <div className="relative h-48 w-full overflow-hidden rounded-md sm:h-56 md:h-64 lg:h-72">
                 {article.thumbnail ? (
-                  <Image
+                  <img
                     src={article.thumbnail}
                     alt="Thumbnail"
-                    fill
-                    className="object-cover"
-                    sizes="100vw"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-muted text-xs text-muted-foreground">

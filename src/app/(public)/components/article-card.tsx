@@ -2,7 +2,6 @@ import { Calendar, PlayIcon } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import Image from "next/image";
 
 type ArticleCardProps = {
   article: {
@@ -27,12 +26,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
         className="relative block h-full min-h-[220px] overflow-hidden rounded-xl bg-muted sm:min-h-[280px]"
       >
         {article.thumbnail && (
-          <Image
+          <img
             src={article.thumbnail}
             alt={article.title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="eager"
           />
         )}

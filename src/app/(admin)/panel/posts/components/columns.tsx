@@ -25,7 +25,7 @@ import { tableFeaturesConfig } from "@/lib/table-features";
 
 import type { Prisma } from "@/generated/prisma/client";
 
-import Image from "next/image";
+
 
 export type Article = Prisma.ArticleGetPayload<{
   include: {
@@ -140,12 +140,10 @@ export const getColumns = ({
       return (
         <div className="relative h-14 w-20 overflow-hidden rounded-md">
           {thumbnail ? (
-            <Image
+            <img
               src={thumbnail}
               alt="Thumbnail"
-              fill
-              className="object-cover"
-              sizes="80px"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-muted text-xs text-muted-foreground">

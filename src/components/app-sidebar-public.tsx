@@ -29,7 +29,6 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import Image from "next/image";
 import { Site } from "@/app/(public)/layout";
 
 const data = {
@@ -99,7 +98,7 @@ export function AppSidebar({
       <SidebarHeader>
         <div className="flex gap-4">
           <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-            <Image
+            <img
               src={site.logo ?? ""}
               className="size-full object-contain"
               height={50}
