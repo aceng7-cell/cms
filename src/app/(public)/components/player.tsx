@@ -76,17 +76,6 @@ export default function Player({
           </div>
         </div>
       </div>
-      {posts.thumbnail && (
-        <div className="relative mb-5 aspect-video w-full overflow-hidden rounded-xl border border-border bg-muted">
-          <img
-            src={posts.thumbnail}
-            alt={posts.title}
-            loading="eager"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        </div>
-      )}
-
       <div
         ref={playerRef}
         className="relative isolate aspect-video w-full overflow-hidden rounded-xl border border-border bg-black shadow-sm"
