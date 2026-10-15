@@ -209,7 +209,7 @@ const Page = async ({ params }: PageProps) => {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white px-2">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

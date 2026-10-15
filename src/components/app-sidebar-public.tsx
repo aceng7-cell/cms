@@ -56,8 +56,8 @@ const data = {
           icon: TagsIcon,
         },
         {
-          title: "Local Pride",
-          url: "category/local-pride",
+          title: "Lokal",
+          url: "category/lokal",
           icon: TagsIcon,
         },
         {

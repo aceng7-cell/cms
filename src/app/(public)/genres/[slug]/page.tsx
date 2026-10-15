@@ -100,7 +100,7 @@ export default async function GenresPage({
       <main className="mx-auto px-4  py-4">
         {/* Header */}
         <section className="mb-8 rounded-xl border bg-card p-5 sm:p-7">
-          <div className="mb-4 flex items-center uppercase gap-2 text-sm text-muted-foreground">
+          <div className="mb-4 flex items-center  gap-2 text-sm text-muted-foreground">
             <List className="size-4" />
             <span>Genres</span>
           </div>
@@ -128,7 +128,7 @@ export default async function GenresPage({
         {/* Articles */}
         {genres.articles.length > 0 ? (
           <>
-            <div className="grid gap-2 md:grid-cols-3 lg:grid-cols-5">
+            <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-5">
               {genres.articles.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))}

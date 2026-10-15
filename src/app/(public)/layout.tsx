@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Prisma } from "@/generated/prisma/client";
-import { getSiteSetting } from "../../../lib/site";
-import { getAds } from "../../../lib/ads";
+import { getSiteSetting } from "../../../lib/site";;
 
 import {
   SidebarInset,
@@ -93,7 +92,7 @@ export default async function PublicLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [site, ads] = await Promise.all([getSiteSetting(), getAds()]);
+  const [site] = await Promise.all([getSiteSetting()]);
 
   return (
     <SidebarProvider>
@@ -113,7 +112,7 @@ export default async function PublicLayout({
             <Breadcrumbnav />
           </div>
 
-          <div className="w-[140px] shrink-0 sm:w-auto">
+          <div className="w-[140px] shrink-0 sm:w-auto mr-0.5">
             <SearchField />
           </div>
         </header>

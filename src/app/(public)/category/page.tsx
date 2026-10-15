@@ -73,11 +73,11 @@ export default async function CategoryPage({
 
   return (
     <div className="w-full bg-white">
-      <main className="mx-auto px-2 py-2">
+      <main className="mx-auto px-4 py-2">
         <section className="mb-10 px-2 py-1 sm:mb-24 sm:py-2">
           <div className="mx-auto w-full">
             <div className="min-w-0 max-w-full rounded-lg border bg-white px-3 py-2 text-sm text-muted-foreground">
-              <div className="mb-0 flex items-center gap-2 text-sm uppercase text-muted-foreground">
+              <div className="mb-0 flex items-center gap-2 text-sm text-muted-foreground">
                 <List className="size-4" />
                 <span>Category</span>
               </div>
