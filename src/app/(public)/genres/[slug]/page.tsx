@@ -14,10 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
-  const [result, site] = await Promise.all([
-    getGenres(slug, 1),
-    getSiteSeo(),
-  ]);
+  const [result, site] = await Promise.all([getGenres(slug, 1), getSiteSeo()]);
 
   if (!result.genres) {
     return {};
@@ -95,8 +92,10 @@ export default async function GenresPage({
     notFound();
   }
 
+
+
   return (
-     <div className="w-full bg-white">
+    <div className="w-full bg-white">
       <main className="mx-auto px-4  py-4">
         {/* Header */}
         <section className="mb-8 rounded-xl border bg-card p-5 sm:p-7">

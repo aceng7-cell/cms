@@ -18,7 +18,7 @@ type ArticleCardProps = {
 export function ArticleCard({ article }: ArticleCardProps) {
   const createdAt = new Date(article.createdAt);
   const articleUrl = `/${format(createdAt, "yyyy/MM/dd")}/${article.slug}`;
-
+  console.log(article.thumbnail);
   return (
     <article className="group h-full">
       <Link
@@ -28,9 +28,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
         {article.thumbnail && (
           <img
             src={article.thumbnail}
-            alt={article.title}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="eager"
+            alt={"kontol"}
+            className="absolute inset-0 z-0 block h-full w-full object-cover"
+            loading="lazy"
           />
         )}
 

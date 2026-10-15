@@ -34,7 +34,7 @@ const formSchema = z.object({
   title: z
     .string()
     .min(5, "Title must be at least 5 characters.")
-    .max(150, "Title must be at most 150 characters."),
+    .max(300, "Title must be at most 300 characters."),
   thumbnail: z.string().min(1, "Thumbnail is required"),
   status: z.enum(["publish", "draft"]),
   slug: z
@@ -50,7 +50,7 @@ const formSchema = z.object({
     .max(10, "Upload By must be at most 10 characters."),
   metaDescription: z
     .string()
-    .max(160, "Meta description must be at most 160 characters.")
+    .max(300, "Meta description must be at most 300 characters.")
     .optional(),
   categories: z.string(),
   genres: z.string(),
