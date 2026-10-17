@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Prisma } from "@/generated/prisma/client";
-import { getSiteSetting } from "../../../lib/site";;
+import { getSiteSetting } from "../../../lib/site";
 
 import {
   SidebarInset,
@@ -99,7 +99,6 @@ export default async function PublicLayout({
       <AppSidebar site={site} />
 
       <SidebarInset>
-   
         <header className="sticky top-0 z-50 flex h-16 min-w-0 shrink-0 items-center gap-2 overflow-hidden border-b bg-white px-3 sm:px-4">
           <SidebarTrigger className="-ml-1 shrink-0" />
 
@@ -112,11 +111,11 @@ export default async function PublicLayout({
             <Breadcrumbnav />
           </div>
 
-          <div className="w-[140px] shrink-0 sm:w-auto mr-0.5">
+          <div className="mr-3 w-[140px] shrink-0 sm:mr-1 sm:w-auto">
             <SearchField />
           </div>
         </header>
-     
+
         <div className="w-full min-w-0 max-w-full">
           {/* Google Analytics */}
           {process.env.VERCEL_ENV === "production" &&
@@ -155,11 +154,8 @@ export default async function PublicLayout({
                 <Script key={ad.id} src={ad.url} strategy="lazyOnload" />
               ))}
 
-       
-
           {children}
 
-         
           {/* Body Ad Scripts */}
           {process.env.VERCEL_ENV === "production" &&
             site.adLinks

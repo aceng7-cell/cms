@@ -254,7 +254,7 @@ export const getColumns = ({
                   row.original.createdAt,
                   "yyyy/MM/dd",
                 )}/${row.original.slug}`;
-                const urlAndTitle = `${row.original.title}\n\nLink Download: 👇 \n${url}`;
+                const urlAndTitle = `${row.original.title}\n\nLink Nonton: 👇 \n${url}`;
                 await navigator.clipboard.writeText(urlAndTitle);
               }}
             >
